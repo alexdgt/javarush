@@ -1,0 +1,57 @@
+package com.javarush.test.level18.lesson10.home05;
+
+/* Округление чисел
+Считать с консоли 2 имени файла
+Первый файл содержит вещественные(дробные) числа, разделенные пробелом. Например, 3.1415
+Округлить числа до целых и записать через пробел во второй файл
+Закрыть потоки. Не использовать try-with-resources
+Принцип округления:
+3.49 - 3
+3.50 - 4
+3.51 - 4
+-3.49 - -3
+-3.50 - -3
+-3.51 - -4
+*/
+
+import java.io.*;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.util.Locale;
+
+public class Solution {
+    public static void main(String[] args) throws Exception {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        String firstFileName = reader.readLine();
+        String secondFileName = reader.readLine();
+        BufferedReader fileReader = new BufferedReader(new InputStreamReader(new FileInputStream(firstFileName)));
+        
+        String inputData ="";
+        inputData = fileReader.readLine();
+        
+        String [] data = inputData.split(" ");
+        
+        StringBuilder stringBuilder = new StringBuilder();
+        DecimalFormat decimalFormat = new DecimalFormat("###");
+        
+        for (int i = 0; i < data.length; i++){
+            float tmp = Float.parseFloat(data[i]);
+            if (tmp > 0){
+                decimalFormat.setRoundingMode(RoundingMode.HALF_UP);
+                stringBuilder.append(decimalFormat.format(tmp)+" ");
+            }
+            else {
+                decimalFormat.setRoundingMode(RoundingMode.HALF_DOWN);
+                stringBuilder.append(decimalFormat.format(tmp)+" ");
+            }
+            
+            FileWriter fileWriter = new FileWriter(secondFileName);
+            fileWriter.write(stringBuilder.toString());
+            fileWriter.close();
+            reader.close();
+            fileReader.close();
+
+        }
+
+    }
+}
