@@ -42,8 +42,7 @@ public class Solution {
         for (String a: params){
             if (a.startsWith("obj="))
             {
-                try
-                {
+                try {
                     alert(Double.parseDouble(a.substring(a.indexOf('=') + 1, a.length())));
                 }
                 catch (Exception e)
