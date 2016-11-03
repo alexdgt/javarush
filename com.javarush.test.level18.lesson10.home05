@@ -50,8 +50,6 @@ public class Solution {
             fileWriter.close();
             reader.close();
             fileReader.close();
-
         }
-
     }
 }
