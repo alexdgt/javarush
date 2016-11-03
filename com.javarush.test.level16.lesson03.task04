@@ -23,7 +23,6 @@ public class Solution
 
     public static class SpecialThread implements Runnable
     {
-
         @Override
         public void run()
         {
@@ -32,6 +31,5 @@ public class Solution
                 System.out.println(element);
             }
         }
-
     }
 }
