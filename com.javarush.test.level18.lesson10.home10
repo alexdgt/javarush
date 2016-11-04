@@ -1,0 +1,50 @@
+package com.javarush.test.level18.lesson10.home10;
+
+/* Собираем файл
+Собираем файл из кусочков
+Считывать с консоли имена файлов
+Каждый файл имеет имя: [someName].partN. Например, Lion.avi.part1, Lion.avi.part2, ..., Lion.avi.part37.
+Имена файлов подаются в произвольном порядке. Ввод заканчивается словом "end"
+В папке, где находятся все прочтенные файлы, создать файл без приставки [.partN]. Например, Lion.avi
+В него переписать все байты из файлов-частей используя буфер.
+Файлы переписывать в строгой последовательности, сначала первую часть, потом вторую, ..., в конце - последнюю.
+Закрыть потоки. Не использовать try-with-resources
+*/
+
+import java.io.*;
+import java.util.Set;
+import java.util.TreeSet;
+
+public class Solution {
+    public static void main(String[] args) throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        Set<String> fileNames = new TreeSet<String>();
+
+        while (true){
+            String s = reader.readLine();
+            if(s.equals("end")) break;
+            fileNames.add(s);
+        }
+        reader.close();
+        
+        String newFileName = fileNames.iterator().next().toString();
+        String [] splitedName = newFileName.split("\\.");
+        newFileName ="";
+
+        for (int i=0; i < splitedName.length-1; i++){
+            if(i==splitedName.length-2) newFileName = newFileName+ "." + splitedName[i];
+            else newFileName = newFileName+splitedName[i];
+        }
+
+        for (String elem : fileNames){
+            FileInputStream fileInputStream = new FileInputStream(elem);
+            FileOutputStream fileOutputStream = new FileOutputStream(newFileName,true);
+            while (fileInputStream.available() > 0){
+                fileOutputStream.write(fileInputStream.read());
+            }
+            fileInputStream.close();
+            fileOutputStream.close();
+        }
+
+    }
+}
