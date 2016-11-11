@@ -1,0 +1,106 @@
+package com.javarush.test.level19.lesson10.bonus03;
+
+/* Знакомство с тегами
+Считайте с консоли имя файла, который имеет HTML-формат
+Пример:
+Info about Leela <span xml:lang="en" lang="en"><b><span>Turanga Leela
+</span></b></span><span>Super</span><span>girl</span>
+Первым параметром в метод main приходит тег. Например, "span"
+Вывести на консоль все теги, которые соответствуют заданному тегу
+Каждый тег на новой строке, порядок должен соответствовать порядку следования в файле
+Количество пробелов, \n, \r не влияют на результат
+Файл не содержит тег CDATA, для всех открывающих тегов имеется отдельный закрывающий тег, одиночных тегов нету
+Тег может содержать вложенные теги
+Пример вывода:
+<span xml:lang="en" lang="en"><b><span>Turanga Leela</span></b></span>
+<span>Turanga Leela</span>
+<span>Super</span>
+<span>girl</span>
+
+Шаблон тега:
+<tag>text1</tag>
+<tag text2>text1</tag>
+<tag
+text2>text1</tag>
+
+text1, text2 могут быть пустыми
+*/
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.InputStreamReader;
+import java.util.*;
+
+public class Solution {
+    public static void main(String[] args) throws Exception
+    {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        String fileName = "c:/1/index.html";
+        String tag = "span";
+        String startTag = "<"+tag;
+        BufferedReader fileReader = new BufferedReader(new FileReader(fileName));
+        List<String> list = new ArrayList<String>();
+        List<Integer> tagBeg = new ArrayList<Integer>();
+        List<Integer> tagEnd = new ArrayList<Integer>();
+        while (fileReader.ready())
+        {
+            list.add(fileReader.readLine());
+        }
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < list.size(); i++)
+        {
+            stringBuilder.append(list.get(i));
+        }
+        String tagString = stringBuilder.toString();
+
+        //Stack stack = new Stack();
+        List<Integer> stack = new ArrayList<Integer>();
+        for (int i = 0; i < tagString.length(); i++)
+        {
+            if (i < tagString.length() - startTag.length())
+            {
+                if (tagString.substring(i, i + startTag.length()-1).equals(startTag) == true) stack.add(i);
+
+            }
+        }
+        Map<Integer, Integer> tagMap = new TreeMap<Integer, Integer>();
+        for (int i = 0; i < tagString.length(); i++)
+        {
+            if (tag.substring(i, i + tag.length() + 2).equals("<\\" + tag + ">"))
+            {
+              //  tagMap.put(stack.readTop(), i + tag.length() + 2);
+              //  stack.delete();
+            }
+        }
+        for (Map.Entry<Integer, Integer> entry : tagMap.entrySet())
+        {
+
+            System.out.println(tagString.substring(entry.getKey(), entry.getValue()));
+
+        }
+    }
+
+    public static class Stack
+    {
+        private List<Integer> beg = new ArrayList<Integer>();
+
+        public void addElement(int element)
+        {
+
+            beg.add(element);
+        }
+
+        public int readTop()
+        {
+            return beg.get(beg.size() - 1);
+        }
+
+        public boolean isEmpty()
+        {
+            return beg.isEmpty();
+        }
+        public void delete(){
+            beg.remove(beg.size()-1);
+        }
+    }
+}
